@@ -10,4 +10,8 @@ jobs:
       - name: Execute Composite Action
         uses: ./ # Usa la acción desde el repositorio actual
         with:
-            who-to-greet: GitHub Actions
+          jdk-distribution: corretto
+          jdk-version: 21
+          pom-file: test-action/pom.xml
+          mvn-goals: clean package
+          mvn-opts: -Xmx2048m

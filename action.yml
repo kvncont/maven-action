@@ -1,29 +1,62 @@
-name: 'Hello World Template'
-description: 'Composite Action Template'
+name: Maven Build
+description: Composite Action for Maven
 inputs:
-  who-to-greet:
-    description: 'Who to greet'
+  jdk-distribution:
+    description: JDK distribution to use (https://github.com/actions/setup-java?tab=readme-ov-file#supported-distributions)
     required: false
-    default: 'World'
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+    default: corretto
+  jdk-version:
+    description: JDK version to use (https://github.com/actions/setup-java?tab=readme-ov-file#supported-version-syntax)
+    required: false
+    default: '21'
+  pom-file:
+    description: Pom file path
+    required: false
+    default: ./pom.xml
+  mvn-goals:
+    description: 'Maven goals to execute'
+    required: false
+    default: clean package
+  mvn-opts:
+    description: Maven Opts to configure
+    required: false
+    default: -Xmx2048m
 runs:
   using: "composite"
   steps:
-    - name: Set Greeting
-      shell: bash
-      run: echo "Hello $INPUT_WHO_TO_GREET."
-      env:
-        INPUT_WHO_TO_GREET: ${{ inputs.who-to-greet }}
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: ${{ inputs.jdk-distribution }}
+        java-version: ${{ inputs.jdk-version }}
+        cache: maven
 
-    - name: Random Number Generator
+    - name: Maven Build
       shell: bash
       id: random-number-generator
-      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
+      env:
+        MAVEN_OPTS: ${{ inputs.mvn-opts }}
+      run: |
+        mvn -B -U ${{ inputs.mvn-goals }} -f ${{ inputs.pom-file }}
 
-    - name: Read Output
+    - name: Find and Zip Artifact
       shell: bash
       run: |
-        echo output: ${{ steps.random-number-generator.outputs.random-number }}
+        target_dir=$(find . -type d -name "target" | head -n 1)
+        if [ -z "$target_dir" ]; then
+          echo "No target directory found!"
+          exit 1
+        fi
+
+        artifact=$(find "$target_dir" -type f \( -name "*.jar" -o -name "*.ear" -o -name "*.war" \) | head -n 1)
+        if [ -z "$artifact" ]; then
+          echo "No artifact found!"
+          exit 1
+        fi
+        zip -j artifact.zip "$artifact"
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifact
+        path: artifact.zip

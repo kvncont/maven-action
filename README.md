@@ -1,14 +1,14 @@
-# Composite Action Template
+# Maven Build Action
 
-This is a composite action for GitHub Actions. Composite actions allow you to combine multiple steps into a single reusable action. This template demonstrates how to create a composite action that takes an input, performs some operations, and produces an output.
+This is a composite action for GitHub Actions designed to streamline the Maven build process. Composite actions allow you to combine multiple steps into a single reusable action. This action sets up the JDK, configures Maven, and runs specified Maven goals, making it easier to manage Java projects in your CI/CD pipeline.
 
 ## Inputs
 
-- `who-to-greet`: Who to greet. Default is `World`.
-
-## Outputs
-
-- `random-number`: A randomly generated number.
+- `jdk-distribution`: JDK distribution to use. Default is `corretto`.
+- `jdk-version`: JDK version to use. Default is `21`.
+- `pom-file`: Path to the Pom file. Default is `./pom.xml`.
+- `mvn-goals`: Maven goals to execute. Default is `clean package`.
+- `mvn-opts`: Maven options to configure. Default is `-Xmx2048m`.
 
 ## Example Usage
 
@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Composite Action
-        uses: kvncont/template-composite-action@main # Replace with your repo name
+        uses: kvncont/maven-action@main # Remember use a tag instead of main
 ```
 
 ### Using All Inputs
@@ -41,7 +41,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Composite Action
-        uses: kvncont/template-composite-action@main # Replace with your repo name
+        uses: kvncont/maven-action@main # Remember use a tag instead of main
         with:
-          who-to-greet: "GitHub Actions"
+          jdk-distribution: corretto
+          jdk-version: 21
+          pom-file: test-action/pom.xml
+          mvn-goals: clean package
+          mvn-opts: -Xmx2048m
 ```

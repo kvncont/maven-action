@@ -1,0 +1,13 @@
+name: "Test Composite Action with all inputs"
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Execute Composite Action
+        uses: ./ # Usa la acción desde el repositorio actual
+        with:
+            who-to-greet: GitHub Actions

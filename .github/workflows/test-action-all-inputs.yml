@@ -1,5 +1,10 @@
 name: "Test Composite Action with all inputs"
-on: [push]
+on: 
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest

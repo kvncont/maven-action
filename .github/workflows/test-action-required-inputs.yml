@@ -1,5 +1,10 @@
 name: "Test Composite Action with required inputs"
-on: [push]
+on: 
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,4 +15,4 @@ jobs:
       - name: Execute Composite Action
         uses: ./ # Usa la acción desde el repositorio actual
         with:
-          pom-file: test-action/pom.xml
+          pom-file: test-action/pom.xml # Is not required but in this case is required

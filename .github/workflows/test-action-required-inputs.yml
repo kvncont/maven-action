@@ -9,3 +9,5 @@ jobs:
 
       - name: Execute Composite Action
         uses: ./ # Usa la acción desde el repositorio actual
+        with:
+          pom-file: test-action/pom.xml

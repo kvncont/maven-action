@@ -26,6 +26,7 @@
                 "editor.tabSize": 2,
                 "files.encoding": "utf8",
                 "terminal.integrated.scrollback": 20000,
+                "java.compile.nullAnalysis.mode": "automatic",
                 "[jsonc]": {
                     "editor.defaultFormatter": "vscode.json-language-features",
                     "editor.tabSize": 4
@@ -35,5 +36,7 @@
 	},
 	"mounts": [
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
-    ]
+    ],
+    "postCreateCommand": "bash .devcontainer/scripts/post_create.sh ${containerWorkspaceFolder}"
+
 }

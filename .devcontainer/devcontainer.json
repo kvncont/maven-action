@@ -1,0 +1,39 @@
+{
+	"name": "Maven Action",
+	"image": "mcr.microsoft.com/devcontainers/java:1-21-bullseye",
+	"features": {
+		"ghcr.io/devcontainers/features/java:1": {
+            "version": "none",
+			"installMaven": "true",
+			"installGradle": "false"
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"GitHub.vscode-pull-request-github",
+				"github.vscode-github-actions",
+				"bierner.github-markdown-preview",
+				"redhat.vscode-yaml"
+			],
+			"settings": {
+                "editor.bracketPairColorization.enabled": true,
+                "editor.insertSpaces": true,
+                "editor.detectIndentation": false,
+                "editor.tabSize": 2,
+                "files.encoding": "utf8",
+                "terminal.integrated.scrollback": 20000,
+                "[jsonc]": {
+                    "editor.defaultFormatter": "vscode.json-language-features",
+                    "editor.tabSize": 4
+                }
+            }
+		}
+	},
+	"mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ]
+}

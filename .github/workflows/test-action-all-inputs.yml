@@ -1,5 +1,9 @@
 name: "Test Composite Action with all inputs"
-on: [push]
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,4 +14,8 @@ jobs:
       - name: Execute Composite Action
         uses: ./ # Usa la acción desde el repositorio actual
         with:
-            who-to-greet: GitHub Actions
+          jdk-distribution: corretto
+          jdk-version: 21
+          pom-file: test-action/pom.xml
+          mvn-goals: clean package
+          mvn-opts: -Xmx2048m
